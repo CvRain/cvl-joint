@@ -8,7 +8,14 @@ set(CMAKE_CXX_EXTENSIONS ON)
 find_package(oatpp CONFIG REQUIRED)
 
 set(SRC src/app.cpp
-        src/component.hpp)
+        src/component.hpp
+        src/dto/any_dto.hpp
+        src/controller/hello_controller.hpp)
+
+include_directories(src
+        src/dto
+        src/controller)
+
 add_executable(CvlJoint ${SRC})
 
 target_link_libraries(CvlJoint PRIVATE oatpp::oatpp oatpp::oatpp-test)
