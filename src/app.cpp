@@ -1,5 +1,6 @@
 #include "component.hpp"
 #include "controller/hello_controller.hpp"
+#include "controller/system_info.hpp"
 
 #include <oatpp/network/Server.hpp>
 #include <oatpp/core/macro/codegen.hpp>
@@ -44,6 +45,10 @@ int main() {
     }
 
     run(host,port);
+    std::cout << "\nEnvironment:\n";
+    std::cout << "objectsCount = " << oatpp::base::Environment::getObjectsCount() << "\n";
+    std::cout << "objectsCreated = " << oatpp::base::Environment::getObjectsCreated() << "\n\n";
+
 
     /* Destroy oatpp Environment */
     oatpp::base::Environment::destroy();
@@ -53,25 +58,16 @@ int main() {
 void run(const std::string &host, const uint16_t port) {
 
     //注册一个应用服务组件
-    AppComponent::Component components(host, port);
+    AppComponent::Component components{host,port};
 
-    //获得路由组建
-    OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);
+    auto router = components.httpRouter.getObject();
+    router->addController(Controller::HelloController::createShared());
+    router->addController(Controller::SystemInfoController::createShared());
 
-    auto hello_controller = std::make_shared<Controller::HelloController>();
-    router->addController(hello_controller);
+    oatpp::network::Server server(components.serverConnectionProvider.getObject(),
+                                  components.serverConnectionHandler.getObject());
 
-    //获得连接组建
-    OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler);
-
-    //服务连接组建
-    OATPP_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, connectionProvider);
-
-    //创建一个Tcp服务
-    oatpp::network::Server server(connectionProvider, connectionHandler);
-
-    //打印服务器初始化信息
-    OATPP_LOGI("CvlJoint", "Listening: %s", connectionProvider->getProperty("port").getData());
+    OATPP_LOGD("Server", "Running on port %s...", components.serverConnectionProvider.getObject()->getProperty("port").toString()->c_str());
 
     /* Run server */
     server.run();

@@ -11,7 +11,7 @@ find_package(tomlplusplus CONFIG REQUIRED)
 set(SRC src/app.cpp
         src/component.hpp
         src/dto/any_dto.hpp
-        src/controller/hello_controller.hpp)
+        src/controller/hello_controller.hpp src/controller/system_info.hpp src/dto/server_dto.hpp)
 
 include_directories(src
         src/dto
