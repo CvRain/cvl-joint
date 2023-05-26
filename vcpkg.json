@@ -1,6 +1,9 @@
 {
     "dependencies": [
         "tomlplusplus",
-        "oatpp"
-    ]
+        "oatpp",
+        "poco"
+    ],
+    "name": "cvl-joint",
+    "version": "1.0.0"
 }

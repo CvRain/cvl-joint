@@ -44,7 +44,7 @@ class SystemDateDto : public oatpp::DTO {
 
     DTO_FIELD(String, second);
 
-    DTO_FIELD(String, millisecond);
+    DTO_FIELD(String, timestramp);
 };
 
 #include OATPP_CODEGEN_END(DTO)

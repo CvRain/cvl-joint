@@ -13,6 +13,8 @@
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 
+#include "service/system_info_service.hpp"
+
 #include <memory>
 #include <chrono>
 #include <ctime>
@@ -50,18 +52,7 @@ public:
     ENDPOINT_ASYNC_INIT(SysDate)
 
         Action act() override {
-            const auto date_now = std::chrono::system_clock::now();
-            const auto data_now_c = std::chrono::system_clock::to_time_t(date_now);
-            const auto local_time = std::localtime(&data_now_c);
-            auto time_struct = Dto::SystemDateDto::createShared();
-
-            time_struct->year = std::to_string(local_time->tm_year + 1900);
-            time_struct->month = std::to_string(local_time->tm_mon + 1);
-            time_struct->day = std::to_string(local_time->tm_mday + 1);
-            time_struct->hour = std::to_string(local_time->tm_hour + 1);
-            time_struct->minute = std::to_string(local_time->tm_min + 1);
-            time_struct->second = std::to_string(local_time->tm_sec + 1);
-            time_struct->millisecond = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(date_now.time_since_epoch()).count());
+            const auto time_struct = Service::SystemInfoService::GetSystemDate();
             return _return(controller->createDtoResponse(Status::CODE_200, time_struct));
         }
     };

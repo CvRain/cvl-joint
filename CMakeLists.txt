@@ -11,11 +11,15 @@ find_package(tomlplusplus CONFIG REQUIRED)
 set(SRC src/app.cpp
         src/component.hpp
         src/dto/any_dto.hpp
-        src/controller/hello_controller.hpp src/controller/system_info.hpp src/dto/server_dto.hpp)
+        src/controller/hello_controller.hpp
+        src/controller/system_info.hpp
+        src/dto/server_dto.hpp
+        src/service/system_info_service.cpp src/service/system_info_service.hpp)
 
 include_directories(src
         src/dto
-        src/controller)
+        src/controller
+        src/service)
 
 add_executable(CvlJoint ${SRC})
 
